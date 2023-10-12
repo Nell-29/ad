@@ -1,11 +1,11 @@
 //Consigue el valor "HULK" del array de avengers y muestralo por consola.
 const avengers = ["HULK", "SPIDERMAN", "BLACK PANTHER"];
-console.log(avengers[0]);
+console.log(avengers)
 //Cambia el primer elemento de avengers a "IRONMAN"
 //console numero de elementos en el array usando la propiedad correcta de Array.
 avengers[1]="IROMAN";
-console.log(avengers);
 console.log(avengers.length);
+console.log(avengers);
 //Añade 2 elementos al array: "Morty" y "Summer". 
 //Muestra en consola el último personaje del array
 const rickAndMortyCharacters = ["Rick", "Beth", "Jerry"];
