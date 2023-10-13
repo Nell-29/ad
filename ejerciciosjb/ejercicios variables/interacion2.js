@@ -36,9 +36,3 @@ finalPriceA=(car1.basePrice+globalBasePrice);
 finalPriceB=(car2.basePrice+globalBasePrice);
 console.log(finalPriceA);
 console.log(finalPriceB);
-
-
-//let nombre=["nelson","jorge"];
-//console.log(nombre[0]+nombre[1]);
-//nombre[0]="jorge";
-//console.log(nombre[0]+nombre[1]);
