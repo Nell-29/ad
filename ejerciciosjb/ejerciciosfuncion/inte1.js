@@ -100,3 +100,45 @@ const numbers = [1, 2, 3, 5, 45, 37, 58];
       }
       console.log(removeDuplicates(duplicates));
       
+      //! interacion ª7.
+      //Crea una función que reciba por parámetro un array y el valor que desea comprobar que existe dentro del array.
+      //comprueba si existe el elemento, en caso que existan nos devuelve un true y la posición de dicho elemento y por la contra un false.
+
+      const nameFinder = [
+        'Peter',
+        'Steve',
+        'Tony',
+        'Natasha',
+        'Clint',
+        'Logan',
+        'Xabier',
+        'Bruce',
+        'Peggy',
+        'Jessica',
+        'Marc'
+      ];
+
+      function finderName(param,palabra) {
+        param.includes(palabra)?
+        console.log(`${param.includes(palabra)} ${param.indexOf(palabra)}`):
+        console.log("false");
+      }
+        
+      finderName(nameFinder,'Peggy');
+      //const finderName (param) => {(nameFinder.includes("logan")? console.log(nameFinder.length):console.log("falso");
+     
+      //! interacion ª8
+      //Crea una función que nos devuelva el número de veces que se repite cada una de las palabras que lo conforma.
+      
+ const counterWords = [ 'code', 'repeat', 'eat','sleep','code', 'enjoy','sleep','code', 'enjoy','upgrade', 'code'];
+        let repeatCounter =(word) => {
+         const wordCount={};
+         counterWords.forEach((word)=>{
+          if (wordCount[word]){
+          wordCount[word]++;
+         } else{ 
+           wordCount[word] = 1;
+         } 
+         });
+         console.log(wordCount);}
+         repeatCounter(counterWords);
