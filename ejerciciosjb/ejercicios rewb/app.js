@@ -138,3 +138,26 @@ let longitud=[];
   que deberá silumar el codigo dentro de la función. Como hemos dicho, que la función use el parametro para simular una tirada de dado y retornar el resultado.
    Si no se te ocurre como hacer un numero aleatorio no te preocupes! busca información sobre la función de javascript Math.random();*/
 
+const rollDice = (numCaras) => {
+   return Math.floor(Math.random() * (numCaras -1 +1)+ 1 );
+}
+const dado=rollDice(6);
+console.log(dado);
+
+ //!-- INTERACION #6
+ /* Crea una función llamada swap() que reciba un array y dos parametros que sean indices del array. 
+ La función deberá intercambiar la posición de los valores de los indices que hayamos enviado como parametro. 
+ Retorna el array resultante.*/
+
+ const players= ['Mesirve', 'Cristiano Romualdo', 'Fernando Muralla', 'Ronalguiño']
+
+ const swap= (array,index1,index2) => {
+    const newArrays=[...array]; // copia del array.
+    const element= newArrays[index1] //  elemento que se encuentra en la posicion que se encuentra en el index1
+    const element1= newArrays[index2] // elemento que se encuentra en la posicion que se encuentra en el index2
+    newArrays.splice(index1,1,element1);
+    newArrays.splice(index2,1,element);
+    return newArrays
+ }
+console.log(swap(players,1,2));
+
