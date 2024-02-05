@@ -1,0 +1,29 @@
+main{
+    min-height: 70vh; 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:23vh;
+    margin-bottom:10vh;
+    }
+    
+#imagenrickandmorty{    
+    height:300px;
+    border-radius: 15px;
+     margin-right:20px; 
+}
+
+#RickandmortyPage{max-width:100%}
+
+@media screen and (max-width: 640px) {
+    #ImagenAhorcado {
+      zoom:25%
+    }
+  }
+  
+  @media screen and (min-width: 640px) and (max-width: 1280px) {
+    #ImagenAhorcado {
+        zoom:50%
+      }
+    }
+    

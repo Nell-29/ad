@@ -1,21 +1,21 @@
 
 
 header {
-    height: 20vh;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    background: #896767;
-    -webkit-box-shadow: 0px 8px 30px -3px rgba(73, 24, 24, 0.61);
-    -moz-box-shadow: 0px 8px 30px -3px rgba(41, 30, 30, 0.61);
-    box-shadow: 0px 8px 30px -3px rgba(72, 60, 60, 0.61);
-    z-index: 100;
-    @media (max-width: 600px) {
-      flex-direction: column;
-    }
-  
+  height: 20vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  background: #896767;
+  -webkit-box-shadow: 0px 8px 30px -3px rgba(73, 24, 24, 0.61);
+  -moz-box-shadow: 0px 8px 30px -3px rgba(41, 30, 30, 0.61);
+  box-shadow: 0px 8px 30px -3px rgba(72, 60, 60, 0.61);
+  z-index: 100;
+  @media (max-width: 600px) {
+    flex-direction: column;
+
+  }
     & nav img {
       width: 20%;
       margin: 0.8em;
@@ -23,7 +23,7 @@ header {
       @media (max-width: 600px) {
         width: 40%;
       }
-      &:hover {
+      &:hover{
         transform: scale(1.2);
       }
     }
@@ -36,9 +36,9 @@ header {
         height: 10vh;
       }
   
-      @media (min-width: 601px) {
+      /*@media (min-width: 601px) {
         object-fit: contain;
-      }
+      }*/
     }
     & nav {
       width: 30vw;
@@ -47,3 +47,5 @@ header {
       align-items: center;
     }
   }
+
+ 

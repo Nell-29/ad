@@ -16,7 +16,7 @@ const template= () => `<div id="containerDashboard">
     </figure>
   </li>
   <li>
-    <figure>
+    <figure id="navigateTres">
       <img
         src="https://res.cloudinary.com/dxvasvakp/image/upload/v1704553352/Tic_tac_toe_dm8iyy.svg"
         alt=" go to wacka topo game"
@@ -33,7 +33,7 @@ const template= () => `<div id="containerDashboard">
     </figure>
   </li>
   <li>
-  <figure id="navigateHangman">
+  <figure id="navigateTopo">
     <img
       src="https://res.cloudinary.com/dxvasvakp/image/upload/v1704553801/topo_i5oo5d.png"
       alt="go to waka topo"
@@ -60,5 +60,5 @@ export const PrintTemplateDashboard = () =>{
     addEventListeners();
 
     getInfo();
-    //getData();
+    getData();
 }

@@ -1,6 +1,6 @@
 import { PrintTemplateHeader } from "../../componentes/estructura/header/header";
 import { FuncionJuego } from "../../utils/FuncionJuego";
-import { PrintLogin } from "../login/login";
+import { PrintLogin} from "../login/login";
 import'./juego.css'
 
 

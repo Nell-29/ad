@@ -1,32 +1,31 @@
 import { getUserio } from "../global/globalState";
-import { login } from "../pages/login/login";
+import{ PrintLogin} from "../pages/login/login";
 import{printPokemonPage} from"../pages/pokemon/pokemon";
 import{PrintTemplateDashboard} from"../pages/dashboard/dashboard";
+import { PrintJuego } from "../pages/juego/juego";
 
 
 export const initControler = (pagesRender) => {
   
-    console.log("soy el usuario",getUserio().name);
-  
-    switch(pagesRender) {
-        case undefined:
-            localStorage.getItem(getUserio().name) ? PrintTemplateDashboard():login();
-            break;
+            localStorage.getItem("username") ? PrintTemplateDashboard():PrintJuego();
+            PrintLogin(); getUserio(); printPokemonPage();
+
+           /* break;
             case"pokemon":
               printPokemonPage();
               break;
             case "Dashboard":
                 PrintTemplateDashboard();
                 break;
-            case "tres":
-                "tres()";
+            case "juego":
+                PrintJuego();
                 break;
             case"login":
-                login();
+                PrintLogin();
                 break;
             case "ahorcado":
                 "ahorcado()";
-                break;
-    }
+                break;*/
+    
     initControler(pagesRender);
     };

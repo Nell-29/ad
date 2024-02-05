@@ -9,7 +9,7 @@ export const FuncionJuego = () => {
    const btnPulsado = (e, pos) => {
      turno ++;
      const btn = e.target;
-     const color = (turno % 2 )? 'salmon': 'paleGreen'
+     const color = (turno % 2 )? '#cd1f0c': '#1f11e2'
      btn.style.backgroundColor = color;
      tablero[pos] = color;
      if (hasGanado()) {
