@@ -1,0 +1,57 @@
+#Filtros{
+    Display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-self: center;
+    align-content: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    gap: 1rem;
+    color:lightgray;
+    width: 100vw
+}
+
+
+.FiltroPokemon{
+    Display:flex;
+    flex-wrap:wrap;
+    display: inline-block;
+    justify-content: center;
+    align-self: center;
+    align-content: center;
+    height:50px;
+    width:250px;
+    border-radius: 15px;
+    border: solid  #cfd2d6;
+    text-align: center;
+    color: var(--gris-oscuro);
+    font-family: 'Courier New', Courier, monospace;
+    font-weight:bolder;
+}
+
+
+
+.FiltroPokemon::placeholder{
+    height:30px;
+    border-radius: 15px;
+    color: #99a7b8;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-weight:lighter;
+
+}
+
+.FiltroPokemon:focus{
+    height:50px;
+    width:300px;
+    border-radius: 15px;
+    border: solid  #cfd2d6;
+    text-align: center;
+    color: var(--gris-oscuro);
+    font-family: 'Courier New', Courier, monospace;
+    font-weight:bolder;
+    outline:none;
+    font-size:20px
+}
+
+

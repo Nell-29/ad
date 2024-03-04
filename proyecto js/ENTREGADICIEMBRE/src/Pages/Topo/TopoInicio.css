@@ -1,0 +1,27 @@
+.btn-topo{
+    display: inline-block;
+     height: 100px;
+     width: 150px;
+     margin: 25px 25px 25px 25px;
+     background-color:var(--gris-oscuro);
+     color:rgb(239, 234, 234);
+     font-family: 'Courier New', Courier, monospace;
+     font-size: 15px;
+     border-radius: 10px;
+     border: none;
+     box-shadow: 0px 8px 15px #8995a2d2;
+     font-weight:100;
+     flex-wrap: nowrap;
+ }
+ 
+ .btn-topo:hover{
+     background-color: rgb(254, 250, 250);
+     color:#8a97a7;
+     border-radius: 10px;
+     border: none;
+     box-shadow: 0px 16px 24px #737e8d;
+     flex-wrap: nowrap;
+     font-weight:1000;
+ }
+ 
+

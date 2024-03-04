@@ -1,0 +1,21 @@
+#jorge {
+    grid-area:imagen;
+    height: 130px;
+    display:flex;
+zoom:50%;
+align-self: center;
+justify-self:end;
+  }
+
+  div{
+    overflow: hidden;
+  }
+  
+
+  @media screen and (max-width: 640px) {
+   #jorge {
+    zoom:20%;
+    }
+  }
+  
+ 
