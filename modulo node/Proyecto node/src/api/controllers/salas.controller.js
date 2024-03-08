@@ -1,35 +1,24 @@
 const {deleteImgCloudinay } = require("../middleware/file.middleware");
-const enumClass = require("../utils/enum.Class");
+const {enumClass, enumDays , enumSalas} = require("../utils/enum.G");
 
 //! modelos 
 
-const salas = require("../models/salas.model");
-const user = require("../models/user.model");
-const teacher = require("../models/teacher.model");
 const Class = require("../models/clases.model");
 const Salas = require("../models/salas.model");
+const teacher = require("../models/teacher.model");
+const User = require("../models/user.model");
 
 //?++++++++++++++++++++++++++++++++
 //! -----------create ----------
 //?+++++++++++++++++++++++++++++
 
 const createSalas = async (req, res, next) => {
-
-    let catchImg = req.file?.path;
  
     try {
       await Salas.syncIndexes();
   
       // Creamos nueva instancia de Movie
       const newSalas= new Salas(req.body);
-
-      if(catchImg) {
-        newSalas.Image = catchImg;
-      } else {
-        newSalas.Image =
-
-        "https://res.cloudinary.com/dxvasvakp/image/upload/v1709145423/51_gNM1DNkL._AC_UF894_1000_QL80__odnt4z.jpg";
-      }
   
       // Guardamos ese registro en la db
       const saveSalas = await newSalas.save();
@@ -42,7 +31,6 @@ const createSalas = async (req, res, next) => {
         return res.status(404).json("No se ha podido crear la sala");
       }
     } catch (error) {
-      req.file?.path && deleteImgCloudinay(catchImg);
       next(error)
       return res.status(409).json("error en sala creada");
     }
@@ -146,7 +134,7 @@ const createSal = async (req, res, next) => {
 const UpdateSalas = async (req, res, next) => {
   try {
   // comprobamos si en la solicitud hay una imagen (si hay nos van a cambiar la imagen del teacher)
-    let catchImg = req.file?.path;
+   
     await Salas.syncIndexes();
 // Traemos el ID de los params de este character a actualizar
     const { id } = req.params;
@@ -155,52 +143,40 @@ const UpdateSalas = async (req, res, next) => {
     const salasById = await Salas.findById(id);
 
     if (salasById) {
-      // guardamos la imagen que tiene el teacher en base de datos
-      const oldImage = salasById.Image;
-
-       // Creamos un body custom con los datos , si los hay, del body
       const bodyCustom = {
        _id: salasById._id,
-       image: req.file?.path ? catchImg : oldImage,
        name: req.body?.name ? req.body?.name : salasById.name,
       };
 
       // comprobamos si recibimos por el body el genero
-      if (req.body?.clases) {
+      if (req.body?.class) {
         // Si lo recibimos llamamos a la función de utils que valida el genero
-        const resultEnumclass = enumClass(req.body?.clases);
-        bodyCustom.clases = resultEnumclass.check
-        ? req.body?.clases
+        const resultEnumclass = enumClass(req.body?.class);
+        bodyCustom.class = resultEnumclass.check
+        ? req.body?.class
         : salasById.class;
+      }
+
+      if (req.body?.salas) {
+        // Si lo recibimos llamamos a la función de utils que valida el genero
+        const resultEnumSalas = enumSalas(req.body?.salas);
+        bodyCustom.salas = resultEnumSalas.check
+        ? req.body?.salas
+        : salasById.salas;
       }
 
       try {
         // busque por id el teacher y lo actualize con el customBody
         await Salas.findByIdAndUpdate(id, bodyCustom);
 
-        // Miramos si han actualizado la imagen por si esto es asi, borrar la antigua
-        if(req.file?.path) {
-// Si la imagen antigua es diferente a la que ponemos por defecto la borramos
-          oldImage !==
-          "https://res.cloudinary.com/dxvasvakp/image/upload/v1709145423/51_gNM1DNkL._AC_UF894_1000_QL80__odnt4z.jpg" &&
-          deleteImgCloudinay(oldImage);
-        }
-
           //! testeo tiempo real 
-
-          //Buscamos el elemento character YA actualizado mediante el id
           const salasByIdUpdate = await Salas.findById(id);
-
-           // Cogemos el req.body y le sacamos las CLAVES para saber que elementos han actualizado
           const elementUpdate = Object.keys(req.body);
-
-          // Creamos un objeto vacío donde vamos a meter este test
           let test = {};
 
-           // Recorremos las claves del body y rellenamos el objeto test
           elementUpdate.forEach((item) => {
-            // Compruebo el valor de las claves del body con los valores del character actualizado
-            if( req.body[item] === salasByIdUpdate[item]) {
+            
+            if( req.body[item] == salasByIdUpdate[item]) {
               test[item] = true;
 
             } else {
@@ -208,37 +184,21 @@ const UpdateSalas = async (req, res, next) => {
             }
           });
 
-          
-        // Comprobamos que la imagen del teacher Actualizado coincide con la imagen nueva si la hay
-        // Si coinciden creamos una copia de test con una nueva clave que será file en true y sino estará en false
-
-          if (catchImg) {
-            salasByIdUpdate.image === catchImg
-            ? (test = {...test, file: true})
-            : (test = {...test, file: false});
-            
-          }
-
-
-        //** Comprobamos que ninguna clave del test este en false, si hay alguna lanzamos un 409 porque alguna
-        //**  clave no se ha actualizado de forma correcta , si estan todas en true lanzamos un 200 que esta todo correcto*/
-
-
            let acc = 0;
 
            for (const key in test) {
             // si esto es false añadimos uno al contador
-            test[key] === false && acc++;
+            test[key] == false && acc++;
            }
 
 
             // si acc es mayor que 0 lanzamos error porque hay alguna clave en false y eso es que no se ha actualizado
            if (acc > 0) {
-            return res.status(409).json({ dataTest: test, update: false });
+            return res.status(409).json({ error:"no se a podido asignar la sala" });
            } else {
             return res
             .status(200)
-            .json({ dataTest: test, update: salasByIdUpdate });
+            .json({update: salasByIdUpdate });
           }
 
       } catch (error) {
@@ -256,173 +216,131 @@ const UpdateSalas = async (req, res, next) => {
   } catch (error) {
     return res 
       .status(409)
-      .json({error:"no se ha podido actualizar", message:error.message});
+      .json({error:"no se ha podido actualizar", message: error.message});
   }
 };
 
 
-
 //?+++++++++++++++++++++++++++++++++++++++++++
-//! --------------Update class-----------
+//! --------------toggle class-----------
 //?+++++++++++++++++++++++++++++++++++++++++++
 
-const UpdateClass = async (req, res, next) => {
+const toggleClass = async (req, res, next) => {
   try {
-  // comprobamos si en la solicitud hay una imagen (si hay nos van a cambiar la imagen del teacher)
-    let catchImg = req.file?.path;
-    await Class.syncIndexes();
 // Traemos el ID de los params de este character a actualizar
     const { id } = req.params;
-
+    const {clase} = req.params
     // buscamos el teacher
-    const classById = await Class.findById(id);
-
+    const classById = await Salas.findById(id);
     if (classById) {
-      // guardamos la imagen que tiene el teacher en base de datos
-      const oldImage = classById.Image;
+      const arrayClass = clase.split(",");
 
-       // Creamos un body custom con los datos , si los hay, del body
-      const bodyCustom = {
-       _id: classById._id,
-       image: req.file?.path ? catchImg : oldImage,
-       name: req.body?.name ? req.body?.name : classById.name,
-      };
+      Promise.all(
+        arrayClass.map(async (clase) => {
+          if (classById.class.includes(clase)) {
 
-      // comprobamos si recibimos por el body el genero
-      if (req.body?.clases) {
-        // Si lo recibimos llamamos a la función de utils que valida el genero
-        const resultEnumclass = enumClass(req.body?.clases);
-        bodyCustom.clases = resultEnumclass.check
-        ? req.body?.clases
-        : salasById.class;
-      }
+            try {
+              await Salas.findByIdAndUpdate(id, {
+                $pull: { Class: clase},
+              });
 
-      try {
-        // busque por id el teacher y lo actualize con el customBody
-        await Class.findByIdAndUpdate(id, bodyCustom);
-
-        // Miramos si han actualizado la imagen por si esto es asi, borrar la antigua
-        if(req.file?.path) {
-// Si la imagen antigua es diferente a la que ponemos por defecto la borramos
-          oldImage !==
-          "https://res.cloudinary.com/dxvasvakp/image/upload/v1709145423/51_gNM1DNkL._AC_UF894_1000_QL80__odnt4z.jpg" &&
-          deleteImgCloudinay(oldImage);
-        }
-
-          //! testeo tiempo real 
-
-          //Buscamos el elemento character YA actualizado mediante el id
-          const classByIdUpdate = await Class.findById(id);
-
-           // Cogemos el req.body y le sacamos las CLAVES para saber que elementos han actualizado
-          const elementUpdate = Object.keys(req.body);
-
-          // Creamos un objeto vacío donde vamos a meter este test
-          let test = {};
-
-           // Recorremos las claves del body y rellenamos el objeto test
-          elementUpdate.forEach((item) => {
-            // Compruebo el valor de las claves del body con los valores del character actualizado
-            if( req.body[item] === classByIdUpdate[item]) {
-              test[item] = true;
-
-            } else {
-              test[item] = false;
+              try {
+                await Class.findByIdAndUpdate(multa, {
+                  $pull: { Salas: id },
+                });
+              } 
+              
+              
+              catch (error) {
+                return res.status(409).json({
+                  error: "Error al desvincular la clase",
+                  message: error.message,
+                });
+              }
+            } catch (error) {
+              return res.status(409).json({
+                error: "Error al desvincular al profesor",
+                message: error.message,
+              });
             }
-          });
+          } else {
 
-          
-        // Comprobamos que la imagen del teacher Actualizado coincide con la imagen nueva si la hay
-        // Si coinciden creamos una copia de test con una nueva clave que será file en true y sino estará en false
 
-          if (catchImg) {
-            classByIdUpdate.image === catchImg
-            ? (test = {...test, file: true})
-            : (test = {...test, file: false});
-            
+            try {
+
+              await Salas.findByIdAndUpdate(id, {
+                $push: { Class: clase},
+              });
+
+              try {
+
+
+                await Class.findByIdAndUpdate(multa, {
+                  $push: { Salas: id },
+                });
+              } catch (error) {
+                return res.status(409).json({
+                  error: "Error en desvincular al profesor de la clase",
+                  message: error.message,
+                });
+              }
+            } catch (error) {
+              return res.status(409).json({
+                error: "Error al desvincular la clase sdel porfesor ",
+                message: error.message,
+              });
+            }
           }
-
-
-        //** Comprobamos que ninguna clave del test este en false, si hay alguna lanzamos un 409 porque alguna
-        //**  clave no se ha actualizado de forma correcta , si estan todas en true lanzamos un 200 que esta todo correcto*/
-
-
-           let acc = 0;
-
-           for (const key in test) {
-            // si esto es false añadimos uno al contador
-            test[key] === false && acc++;
-           }
-
-
-            // si acc es mayor que 0 lanzamos error porque hay alguna clave en false y eso es que no se ha actualizado
-           if (acc > 0) {
-            return res.status(409).json({ dataTest: test, update: false });
-           } else {
-            return res
-            .status(200)
-            .json({ dataTest: test, update: classByIdUpdate });
-          }
-
-      } catch (error) {
-        return res.status(409).json({
-          error:"no se a podido actualizar",
-          message:error.message,
-        });
-        
-      }
+        })
+      ).then(async () => {
+        return res
+          .status(200)
+          .json(await Salas.findById(id).populate("Class"));
+      });
     } else {
-      // si el teacher con ese id no existe
-      return res.status(404).json(" la sala no ha sido encontrado");
+
+      return res.status(404).json("teacher no encontrado, prueba con otro id");
     }
-    
   } catch (error) {
-    return res 
+    return res
       .status(409)
-      .json({error:"no se ha podido actualizar", message:error.message});
+      .json({ error: 'Error al actualizar la clase, por favor preuba con otro id', message: error.message });
   }
 };
-
 
 
 //?+++++++++++++++++++++++++++++++++++++++++++
 //! --------------delete-----------
 //?+++++++++++++++++++++++++++++++++++++++++++
 
-// Borramos el character cuyo ID traemos por params --> //! INCONISTENCIA --> borrar el registro de este id en los campos donde aparece
-//! en este caso aparece en ele array de teachers en Class
-
 const deleteSalas = async (req, res, next) => {
   try {
     // cogemos el id de los params
     const { id } = req.params;
-    const sala = await Salas.findByIdAndDelete(id);
-
-
+    const salas = await Salas.findByIdAndDelete(id);
     // buscamos y borramos el teacher
-
-    if (sala) {
+    if (salas) {
       // Si existe el teacher --> borramos los registros donde aparece
-      //! comprobamos si ese character ha sido borrado
-
+  
       const salasDelete = await Salas.findById(id);
-
-      //! --> borramos los registros de character en los arrys de class donde aparece
-
+     
       try {
-        // UpdateMany --> actualiza todos los registros que contengan en teacher el id del teacher
-        // 1º parametro es el filtro
-        // 2º acción --> en Movie sacar del array de characters el id de ese teacher borrado
-        await Salas.updateMany(
-          { Class: id },
-          { $pull: { Class: id } }
+        await Class.updateMany(
+          { Salas: id },
+          { $pull: { Salas: id } }
+        );
+
+        await teacher.updateMany(
+          { Salas: id },
+          { $pull: { Salas: id } }
+        );
+
+        await User.updateMany(
+          { Salas: id },
+          { $pull: { Salas: id } }
         );
 
         // verificamos que el character borrado no tengo la imagen por defecto para borrarla
-        sala.Image!==
-          "https://res.cloudinary.com/dxvasvakp/image/upload/v1709145423/51_gNM1DNkL._AC_UF894_1000_QL80__odnt4z.jpg" &&
-          deleteImgCloudinay(Teacher.image);
-
         // Lanzamos una respuesta dependiendo de si se ha encontrado el teacher borrado
         return res.status(salasDelete ? 409 : 200).json({
           deleteTest: salasDelete ? false : true,
@@ -452,5 +370,5 @@ const deleteSalas = async (req, res, next) => {
       getAllSalas,
       getByNameSalas, 
       UpdateSalas,
-      UpdateClass,
+      toggleClass,
       deleteSalas };

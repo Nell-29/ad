@@ -7,7 +7,7 @@ const { createSalas,
      getAllSalas,
      getByNameSalas, 
      UpdateSalas,
-     UpdateClass, 
+     toggleClass, 
      deleteSalas } = require("../controllers/salas.controller");
 
 const express = require("express");
@@ -15,12 +15,12 @@ const SalasRouter = express.Router();
 
 //! rutas 
 
-SalasRouter.post("/create",upload.single("image"),createSalas);
+SalasRouter.post("/create",createSalas);
 SalasRouter.post("/create",upload.single("image"),createSal);
 SalasRouter.get("/getAll",getAllSalas);
 SalasRouter.get("/getByName/:name",getByNameSalas);
-SalasRouter.patch("/update/:id",upload.single("image"),UpdateSalas);
-SalasRouter.patch("/update/:id",upload.single("image"),UpdateClass);
+SalasRouter.patch("/update/:id",UpdateSalas);
+SalasRouter.patch("/toggleclass/:id",toggleClass);
 SalasRouter.delete("/delete/:id",deleteSalas);
 
 //! exportar

@@ -5,7 +5,8 @@ const Class = require("../models/clases.model");
 const Salas = require("../models/salas.model");
 const teacher = require("../models/teacher.model");
 const user = require("../models/user.model");
-const enumG = require("../utils/enum.G");
+const enumOk = require("../utils/enum.G");
+const enumClass = require("../utils/enum.G");
 
 //?+++++++++++++++++++++++++++++++++++++++++++
 //! --------------create ----
@@ -199,7 +200,7 @@ const UpdateTeacher = async (req, res, next) => {
       // comprobamos si recibimos por el body el genero
       if (req.body?.gender) {
         // Si lo recibimos llamamos a la función de utils que valida el genero
-        const resultEnumG = enumG(req.body?.gender);
+        const resultEnumG = enumOk(req.body?.gender);
         bodyCustom.gender = resultEnumG.check
         ? req.body?.gender
         : teacherById.gender;

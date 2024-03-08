@@ -17,7 +17,7 @@ const generateToken = (id, email) => {
     // utilizamos el metodo sign de jwt
     // param --> palabra secreta (.env) y la espiracion (caducidad)
   
-    return jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    return jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: "9d" });
   };
   
   //!VERIFICAMOS  

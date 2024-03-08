@@ -1,20 +1,22 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
+const teacherSchema = mongoose.Schema;
 
-const teacherSchema = new Schema(
+const SchemaTeacher = new teacherSchema(
     {
       name: { type: String, required: false, unique: false },
       gender: {
         type: String,
         enum: ["hombre", "mujer", "otro"],
+        default: "otro",
         required: false,
+        immutable: true
       },
       image: { type: String, required: false },
      
-      class: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }],
-      likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
-      salas: [{ type: mongoose.Schema.Types.ObjectId, ref: "salas" }],
+      Class: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }],
+      User: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      Salas: [{ type: mongoose.Schema.Types.ObjectId, ref: "Salas" }],
     },
     
     {
@@ -24,7 +26,7 @@ const teacherSchema = new Schema(
   
   //!--- con la definición de datos 
   
-  const teacher = mongoose.model("teacher",teacherSchema);
+  const teacher = mongoose.model("teacher",SchemaTeacher);
   
   
   module.exports = teacher;

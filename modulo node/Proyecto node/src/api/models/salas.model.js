@@ -10,14 +10,16 @@ const SalasSchema = new Schema({
     name:{ type: String, required: false, unique: false },
     class: {
         type: String,
-        enum: ["yoga", "pilates", " taichi", "boxeo", "kararte", "ciclo", "crossfit", "bodypump"],
+        enum: ["yoga", "pilates", " taichi", "boxeo", "kararte", "ciclo", "crossfit", "bodypump", "otra"],
         required: false,
+        default:"otra"
     },
-    class: {
+    salas: {
         type: String,
-        enum: ["sala A", "sala B", " sala C"],
-        required: false,},
-    Image: { type: String, required: false },
+        enum: ["sala A", "sala B", " sala C", "otra"],
+        required: false,
+        default: "otra"},
+       
     //array que hace refencia a mi modelo movie 
     
    },

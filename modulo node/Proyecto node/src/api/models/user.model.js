@@ -4,75 +4,61 @@ const bcrypt = require("bcrypt");
 
 const validator = require("validator");
 
+const UserSchema = mongoose.Schema;
+
 //! ----------- schema datos
 
-const UserSchema = new mongoose.Schema(
-    {
-      email: {
-        type: String,
-        required: true,
-        trim: true, // quitar espacios
-        unique: true,
-        validate: [validator.isEmail, "Email no válido"],
-      },
-      name: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
-      },
-      password: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: [validator.isStrongPassword], // { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1, returnScore: false, pointsPerUnique: 1, pointsPerRepeat: 0.5, pointsForContainingLower: 10, pointsForContainingUpper: 10, pointsForContainingNumber: 10, pointsForContainingSymbol: 10 }
-      },
-      gender: {
-        type: String,
-        enum: ["hombre", "mujer", "otro"],
-        required: true,
-      },
-      rol: {
-        type: String,
-        enum: ["admin", "user", "superAdmin"],
-        default: "user",
-      },
-      confirmationCode: {
-        type: Number,
-        required: true,
-      },
-      check: {
-        type: Boolean,
-        default: false,
-      },
-      image: {
-        type: String,
-      },
-  
-      // Id de salas
-      SalasFav: [{ type: mongoose.Schema.Types.ObjectId, ref: "salas" }],
-  
-      // Id de class
-      ClassFav: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }],
-  
-      // comentarios 
-      teacherFav: [{ type: mongoose.Schema.Types.ObjectId, ref: "teacher" }],
-  
-      // Id de los users
-      followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
-  
-      // Id de sers seguidos por el user
-      followed: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
-  
+const SchemaUser = new UserSchema(
+  {
+    name: {type: String, unique:true, trim: true,},
+    Sexo: { type: String,
+      enum: ["Hombre", "Mujer", "Otro"],
+      default: "Otro",
     },
-    {
-      timestamps: true,
-    }
-  );
-  
+    image: { type: String, required: false },
+    fecha: {type: Date},
+    Lugar: {type: String},
+    Rol: {type: String, 
+      enum: ["Admin", "User", "teacher"],
+      default: "User",
+    },
+    email: {
+      type: String,
+
+      trim: true, 
+      unique: true,
+      validate: [validator.isEmail, "Email no válido"],
+    },
+    password: {type: String,
+
+      trim: true,
+      validate: [validator.isStrongPassword,"Contraseña no válida. Debe incluir Mínimo 8 Caracteres, Mínimo 1 Mayuscula, Mínimo 1 Minúscula, Mínimo 1 Número, Mínimo 1 Caracter Especial."], // { minCaracteres: 8, minMayusculas: 1, minMinuscula: 1, minNumeros: 1, minCaracteresEspeciales: 1, returnScore: false, pointsPerUnique: 1, pointsPerRepeat: 0.5, pointsForContainingLower: 10, pointsForContainingUpper: 10, pointsForContainingNumber: 10, pointsForContainingSymbol: 10 }
+    },
+    code: {
+      type: Number,
+      required: true,
+    },
+        check: {
+      type: Boolean,
+      default: false,
+    },
+    
+    User: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    teacher: [{ type: mongoose.Schema.Types.ObjectId, ref: "teacher" }],
+    Salas: [{ type: mongoose.Schema.Types.ObjectId, ref: "Salas" }],
+    Class: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }],
+
+
+  },
+ 
+  {
+    timestamps: true,
+  }
+);
+
   //! hacemos un preguardado donde se va a encriptar la contraseña
   
-  UserSchema.pre("save", async function (next) {
+  SchemaUser.pre("save", async function (next) {
     try {
       this.password = await bcrypt.hash(this.password, 10);
       next();
@@ -83,6 +69,6 @@ const UserSchema = new mongoose.Schema(
   
   // ! ---------- creamos el modelo en base al Schema
   
-  const user = mongoose.model("user", UserSchema);
+  const User = mongoose.model("User", SchemaUser);
 
-  module.exports = user;
+  module.exports = User;
