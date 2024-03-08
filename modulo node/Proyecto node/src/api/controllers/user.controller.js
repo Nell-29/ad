@@ -138,7 +138,7 @@ const registerLong = async (req, res, next) => {
 //! -------- register con redirect -----------
 //?++++++++++++++++++++++++++++++++++++++++++
 
-/*const registerRed = async (req, res, next) => {
+const registerRed = async (req, res, next) => {
     let catchImg = req.file?.path;
     try {
 
@@ -146,7 +146,7 @@ const registerLong = async (req, res, next) => {
         await User.syncIndexes();
 
         // guardamos el codigo de confirmación
-        let codex = randomCode();
+        let code = randomCode();
 
         // buscamos si hay algun user con el email o el name
         const usuarioExistent = await User.findOne(
@@ -156,7 +156,7 @@ const registerLong = async (req, res, next) => {
          // Comprobamos que este user no existe
         if (!usuarioExistent) {
             // vemos si hay imagen en la solicitud
-            const nuevoUser = new User ({...req.body, codex });
+            const nuevoUser = new User ({...req.body, code });
             if(req.file) {
                 nuevoUser.image = req.file.path;
             } else {
@@ -261,7 +261,7 @@ const sendCode = async (req, res, next) => {
                 .status(409)
                 .json({ error:"error al enviar el email", message: error.message});
     }
-}*/
+};
 
 //?+++++++++++++++++++++++++++++++++++++++++++
 //! -------- resend code  -------------------
@@ -439,7 +439,7 @@ const autoLogin = async (req, res, next) => {
             if( password === userDB.password) {
                 const token = generateToken(userDB._id, email);
                 return res.status(200).json({
-                    ussuario: userDB,
+                    User: userDB,
                     token,
                 });
         } else {
@@ -656,7 +656,9 @@ const forgotPassword = async (req, res, next) => {
     }
   };
 
-  //! CHANGE PASSWORD
+  //?++++++++++++++++++++++++++++++++++++++++++++++++
+  //! --------------- forgot password-----------------
+  //?+++++++++++++++++++++++++++++++++++++++++++++++++
 //^ INTRODUCIENDO LA CONTRASEÑA ACTUAL Y LA NUEVA CONTRASEÑA POR EL BODY
 //^ Y EL TOKEN , PORQUE ES AUTENTICADA
 const changePassword = async (req, res, next) => {
@@ -670,7 +672,7 @@ const changePassword = async (req, res, next) => {
   
       if (validate) {
   
-        const { _id } = req.User;
+        const { id } = req.User;
   
         if (bcrypt.compareSync(password, req.User.password)) {
   
@@ -678,9 +680,9 @@ const changePassword = async (req, res, next) => {
   
           try {
   
-            await User.findByIdAndUpdate(_id, { password: newPasswordHashed });
+            await User.findByIdAndUpdate(id, { password: newPasswordHashed });
   
-            const userSave = await User.findById(_id);
+            const userSave = await User.findById(id);
   
             if (bcrypt.compareSync(NewPassword, userSave.password)) {
               return res.status(200).json({ User: userSave, testUpdate: true });
@@ -719,6 +721,8 @@ const changePassword = async (req, res, next) => {
 
 module.exports ={ 
      registerLong,
+     registerRed,
+     sendCode,
      resendCode, 
      checkUsuario, 
      login, 
@@ -726,6 +730,6 @@ module.exports ={
      toggleSalas,
      toggleClass,
      forgotPassword,
-    changePassword };
+     changePassword };
 
 

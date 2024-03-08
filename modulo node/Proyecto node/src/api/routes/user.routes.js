@@ -4,7 +4,9 @@ const { upload } = require("../middleware/file.middleware");
 const {isAuth, isAuthAdmin } = require("../middleware/auth.middelware");
 
 const {
-     registerLong, 
+     registerLong,
+     registerRed,
+     sendCode, 
      resendCode,
      checkUsuario, 
      login,
@@ -12,6 +14,7 @@ const {
      toggleSalas , 
      toggleClass,
      forgotPassword, changePassword} = require("../controllers/user.controller");
+const User = require("../models/user.model");
 
 
      const UserRouter = require("express").Router();
@@ -19,8 +22,9 @@ const {
 //!rutas 
 
 UserRouter.post("/registerLong",upload.single("image"), registerLong);
-//UserRouter.post("/registerRed",upload.single("image"), registerRed);
+UserRouter.post("/registerRed",upload.single("image"), registerRed);
 
+UserRouter.post("/register/senMail/:id",sendCode);
 UserRouter.post("/resend", resendCode);
 UserRouter.post("/check", checkUsuario);
 
